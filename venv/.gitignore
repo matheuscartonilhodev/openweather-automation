@@ -1,6 +1,0 @@
-.env
-__pycache__/
-*.pyc
-weather_log.csv
-weather_report*.pdf
-weather_report.xlsx
