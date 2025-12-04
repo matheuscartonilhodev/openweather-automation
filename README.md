@@ -1,107 +1,117 @@
-OpenWeather Automation
-
-Automation system for collecting weather data, storing historical results, and generating structured reports in XLSX and PDF formats.
+OpenWeather Automation ⛅📊
+Automation system for collecting weather data, storing historical logs, generating professional reports (XLSX + PDF), and sending them automatically via email.
 
 🚀 Overview
+This project executes a complete weather-data automation pipeline:
+  Loads .env configuration
+  Fetches weather data from OpenWeather API
+  Validates and parses the response
+  Ensures the CSV log exists
+  Appends the newest record
+  Loads & sorts the entire historical dataset
 
-This project retrieves real-time weather information from the OpenWeather API, logs each query into a CSV history file, and automatically generates two types of reports:
+Generates:
+  Excel Report (.xlsx)
+  PDF Report (.pdf)
+  Sends both files by email
+  Returns execution status
 
-Excel Report (.xlsx) — with formatted headers, zebra rows, alignment rules, filters, and automatic column sizing.
-
-PDF Report (.pdf) — containing general statistics (total records, first and last measurements) and a summary of the last three consultations.
-
-It is designed to simulate a real-world automation workflow: API consumption → Data persistence → Report generation → Optional email sending.
+All steps are orchestrated by the run_automation() function inside main.py.
 
 🧰 Technologies Used
+  Python 3
+  Requests → API consumption
+  CSV → persistent logging
+  OpenPyXL → Excel report creation
+  FPDF → PDF report generation
+  Dotenv → environment configuration
+  SMTP (SSL) → email sending
 
-Python 3
-Requests (API consumption)
-CSV (data persistence)
-OpenPyXL (Excel report generation)
-FPDF (PDF report generation)
-Dotenv (environment variables)
-SMTP (optional) — if email sending is activated
-
-📦 Project Structure
+📂 Project Structure
 /project-root
 │
-├── main.py
-├── send_email.py
-├── weather_log.csv
+├── main.py                 # Full automation pipeline
+├── send_email.py           # Email sending + attachments
+├── weather_log.csv         # Auto-created historical log
 ├── requirements.txt
-└── .env   (you must create this file)
+└── .env                    # You must create this file
 
 🔧 Installation & Setup
+1️⃣ Clone the repository
+  git clone https://github.com/your-username/openweather-automation.git
+  cd openweather-automation
 
-Clone the repository
+2️⃣ Create a .env file
+  OPENWEATHER_API_KEY=your_api_key_here
+  DEFAULT_CITY=YourCityName
+  
+  SMTP_USER=youremail@example.com
+  SMTP_PASS=your_password
+  SMTP_SERVER=smtp.gmail.com
+  SMTP_PORT=465
+  
+  MAIL_TO=recipient@example.com
+  
+  ⚠️ Gmail users must enable "App Passwords" when using 2FA.
 
-git clone https://github.com/your-username/openweather-automation.git
-cd openweather-automation
+3️⃣ Install dependencies
+  pip install -r requirements.txt
 
+4️⃣ Run the automation
+  python main.py
 
-Create the .env file
-OPENWEATHER_API_KEY=your_api_key_here
-
-
-Install dependencies
-pip install -r requirements.txt
-
-
-Run the automation
-python main.py
-
-📌 How It Works
-
-The user runs the script.
-The script asks for a city name.
-The system sends a request to the OpenWeather API.
-The response is validated and parsed.
-The data is appended to weather_log.csv, keeping a historical timeline.
-
-The XLSX report is created or updated:
-Styled headers
-Borders
-Alignment rules
-Zebra rows
-Auto column width
-Frozen header row
-Column filters
-The PDF report is generated containing:
-Total number of records
-First and last consultation timestamps
-The last three weather measurements, formatted
-(Optional) The data can be emailed using send_email.py.
+📌 Automation Pipeline (How It Works)
+🔄 Executed inside run_automation():
+  ✔️ Load environment variables
+  ✔️ Fetch weather data
+  ✔️ Abort if request fails
+  ✔️ Ensure weather_log.csv exists
+  ✔️ Append the new record
+  ✔️ Read + sort the entire log
+  ✔️ Create /reports/YYYY-MM-DD/ folder
+  ✔️ Generate XLSX report
+  ✔️ Generate PDF report
+  ✔️ Send email with attachments
+  ✔️ Return True
 
 📄 Reports Generated
-XLSX Report
-Full historical dataset
-All columns formatted
-Easy filtering and sorting
-Professional table look
+1️⃣ Excel Report (.xlsx)
+  Styled header
+  Zebra rows
+  Borders + cell alignment
+  Auto column width
+  Frozen header row
+  Column filters enabled
+  Full historical dataset
 
-PDF Report
-Includes:
-Generation timestamp
-Total records
-First measurement date
-Last measurement date
-Last 3 consultations (datetime, city, temperature, humidity, description)
+2️⃣ PDF Report (.pdf) contains:
+  Timestamp of report generation
+  Total number of records
+  First recorded measurement
+  Last recorded measurement
+  Last 3 consultations
+  Clean, vertical formatting
+  Files are saved under:
+    /reports/YYYY-MM-DD/weather_report.xlsx
+    /reports/YYYY-MM-DD/weather_report.pdf
 
-📨 Email Sending (Optional)
-If configured, the project can automatically send:
-The API result
-Or the generated reports
-Or both
-The function is available in send_email.py.
+📤 Email Sending
+  The function send_weather_report():
+  Builds a multipart email
+  Includes a text summary (temperature + city)
+  Attaches the XLSX & PDF files
+  Sends everything using SMTP_SSL
+  Email delivery settings come from .env.
 
-📍 Future Improvements (Roadmap)
-Background scheduler (CRON / Task Scheduler)
-Automatic daily reports
-Dashboard (HTML + JS)
-Multi-city batch queries
-Weather alerts system
+📍 Future Improvements
+  Automatic scheduling (cron / Task Scheduler)
+  Multi-city reporting
+  HTML dashboard with charts
+  Web interface to trigger automation
+  Alerts for extreme weather
+  Cloud backup (S3 / GDrive)
 
 🧑‍💻 Author
-Matheus Cartonilho
-Full-Stack & Python Developer
-Porto Velho — RO, Brazil
+  Matheus Cartonilho
+  Full-Stack & Python Developer
+  Porto Velho — RO, Brazil
